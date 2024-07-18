@@ -6,7 +6,7 @@ using Services.Services.Interfaces;
 namespace WorkoutTrackAPI.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("user")]
 
 	public class UserController(IUserService _userService) : Controller
 	{

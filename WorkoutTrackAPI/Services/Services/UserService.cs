@@ -35,8 +35,7 @@ namespace Services.Services
 
 			var newUser = new User()
 			{
-				FirstName = userDto.FirstName,
-				LastName = userDto.LastName,
+
 				UserName = userDto.Username,
 				Email = userDto.Email,
 				PasswordHash = userDto.Password
