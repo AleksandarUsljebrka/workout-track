@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Data.Repository.Interfaces
 {
-	public interface IUserRepository : IRepository<User>
+	public interface IWorkoutRepository:IRepository<Workout>
 	{
-
-		Task<User> GetUserWithWorkouts(Expression<Func<User, bool>> filter);
+		Task<IEnumerable<Workout>> GetAllWithCondition(Expression<Func<Workout, bool>> filter);
 	}
 }

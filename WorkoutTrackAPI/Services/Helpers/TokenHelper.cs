@@ -39,10 +39,11 @@ namespace Services.Helpers
 		{
 			string id = GetClaim(token, "id");
 
-			var user = await _unitOfWork.UserRepository.Get(u => u.Id == id);
+			var user = await _unitOfWork.UserRepository.GetUserWithWorkouts(u => u.Id == id);
 
 			return user;
 		}
+
 		public string GetClaim(string tokenStr, string type)
 		{
 			JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();

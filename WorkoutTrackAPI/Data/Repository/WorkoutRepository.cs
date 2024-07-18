@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Data.Repository
 {
-	public class UserRepository(ApplicationDbContext _context) : Repository<User>(_context), IUserRepository
+	public class WorkoutRepository(ApplicationDbContext _context):Repository<Workout>(_context), IWorkoutRepository
 	{
-
-		public async Task<User> GetUserWithWorkouts(Expression<Func<User, bool>> filter)
+		public async Task<IEnumerable<Workout>> GetAllWithCondition(Expression<Func<Workout, bool>> filter)
 		{
-			return await _context.Set<User>().Include(u => u.Workouts).FirstOrDefaultAsync();
+			return await _context.Set<Workout>().Where(filter).ToListAsync();
 		}
+
 	}
 }
