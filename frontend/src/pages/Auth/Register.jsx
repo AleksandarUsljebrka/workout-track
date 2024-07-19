@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
-//import { register } from "../../services/api";
-import AuthContext from "../../context/authContext";
+import React, { useEffect, useState } from "react";
+import { register } from "../../services/api";
 import { FaUser } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -14,7 +13,8 @@ const Register = () => {
     username: "",
     password: "",
   });
-  const {register} = useContext(AuthContext);
+
+  const [successfullyRegister, setSuccessfullyRegister] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -24,11 +24,29 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(user);
+      const response = await register(user);
+      if(response.data.successfull){
+        setSuccessfullyRegister(true);
+      }
     } catch (error) {
-      alert("Login failed! Please check your credentials.");
+      setSuccessfullyRegister(false);
+      alert("Register failed! Please check your credentials.");
     }
   };
+
+  useEffect(()=>{
+    if (!successfullyRegister)
+    {
+      return
+    }
+
+    if(successfullyRegister){
+      navigate("/login");
+    }else{
+      navigate("/");
+    }
+  },[ successfullyRegister])
+
   return (
     <div className="wrapper-register">
       <div className="form-box">

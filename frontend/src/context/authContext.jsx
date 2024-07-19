@@ -1,7 +1,6 @@
-// AuthContext.js
+
 import { createContext, useCallback, useState } from "react";
 import tokenHelper from "../helpers/tokenHelper";
-import { login, register } from "../services/api"; 
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({
@@ -9,41 +8,40 @@ const AuthContext = createContext({
   logout: () => {},
   isLoggedIn: false,
   data: {},
+  username:'',
+  userId:'',
+  token:'',
+  email:''
 });
 
 export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [data, setData] = useState({});
+  const [user, setUser] = useState({
+    username:'',
+    userId:'',
+    email:'',
+    rawToken:''
+  });
 
   const navigate = useNavigate();
 
-  const handleLogin = async (userData) => {
+  const handleLogin = async (data) => {
     try {
-      const response = await login(userData);
-      const data = response.data;
-
+      
       tokenHelper.saveToken(data.token);
 
-      setData(data);
+      const user = tokenHelper.getUser();
+
+      setUser(user);
       setIsLoggedIn(true);
-      navigate("/dashboard");
     } catch (error) {
       console.error("Error logging in user:", error);
       alert("Login failed! CONTEXT.");
-      navigate("/login");
+      
     }
   };
-  const handleRegister = async (userData) => {
-    try {
-        const data = await register(userData);
-        console.log(data);
-        navigate("/login")
-
-    } catch (error) {
-        console.error('Error registering:', error);
-    }
-};
+  
   const handleLogout = useCallback(() => {
     tokenHelper.removeToken();
 
@@ -51,31 +49,32 @@ export const AuthContextProvider = ({ children }) => {
     navigate("/login");
   }, []);
 
-  const loadToken = useCallback(() => {
+  const loadUser = useCallback(() => {
     if (!tokenHelper.isLoggedin()) {
       return;
     }
 
     if (tokenHelper.isTokenExpired()) {
-        tokenHelper.removeToken();
-         navigate("/login");
-
+      tokenHelper.removeToken();
       return;
     }
 
     setIsLoggedIn(tokenHelper.isLoggedin());
-   
+    const user = tokenHelper.getUser();
+    setUser(user);
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        login: handleLogin,
+        handleLogin: handleLogin,
         logout: handleLogout,
-        loadToken:loadToken,
-        register:handleRegister,
+        loadUser:loadUser,
         isLoggedIn,
-        data: data,
+        username:user.username,
+        userId:user.userId,
+        email:user.email,
+        token:user.rawToken
       }}
     >
       {children}

@@ -16,7 +16,7 @@ namespace Data.Repository
 
 		public async Task<User> GetUserWithWorkouts(Expression<Func<User, bool>> filter)
 		{
-			return await _context.Set<User>().Include(u => u.Workouts).FirstOrDefaultAsync();
+			return await _context.Set<User>().Where(filter).Include(u => u.Workouts).FirstOrDefaultAsync();
 		}
 	}
 }

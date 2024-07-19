@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { MdOutlineMail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import "./auth.css";
 import AuthContext from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../services/api";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -11,8 +12,10 @@ const Login = () => {
     password: "",
   });
 
-  const { login, isLoggedIn, data } = useContext(AuthContext); 
- 
+  const navigate = useNavigate()
+
+  const { handleLogin, isLoggedIn, data } = useContext(AuthContext); 
+  const [attemptedLogin, setAttemptedLogIn] = useState(false) 
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -20,32 +23,32 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAttemptedLogIn(true)
     try{
-      await login(user);
-     
+      const response = await login(user);
+      const data = response.data;
+      await handleLogin(data);
+
     }
     catch(error){
       alert("Login failed! Please check your credentials.");
-      
     }
-    // try {
-    //   await login(user);
-    //   console.log("Login successful");
-    //   alert("Login successful!");
-    //   navigate('/dashboard'); 
-    // } catch (error) {
-    //   console.error("Error logging in user:", error);
-    //   alert("Login failed! Please check your credentials.");
-    // }
   };
 
-  // useEffect(()=>{
-  //   if(data.success && isLoggedIn){
-  //     navigate("/dashboard");
-  //   }else{
-  //     navigate("/");
-  //   }
-  // },[])
+  useEffect(()=>{
+
+    if (!attemptedLogin)
+    {
+      return
+    }
+
+    if(isLoggedIn){
+      navigate("/dashboard");
+    }else{
+      navigate("/");
+    }
+  },[data, isLoggedIn])
+
   return (
     <div className="wrapper">
       <div className="form-box login">
