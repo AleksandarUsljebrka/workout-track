@@ -1,7 +1,6 @@
-// AuthContext.js
+
 import { createContext, useCallback, useState } from "react";
 import tokenHelper from "../helpers/tokenHelper";
-import { login, register } from "../services/api"; 
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({
@@ -18,32 +17,20 @@ export const AuthContextProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
-  const handleLogin = async (userData) => {
+  const handleLogin = async (data) => {
     try {
-      const response = await login(userData);
-      const data = response.data;
-
+      
       tokenHelper.saveToken(data.token);
 
       setData(data);
       setIsLoggedIn(true);
-      navigate("/dashboard");
     } catch (error) {
       console.error("Error logging in user:", error);
       alert("Login failed! CONTEXT.");
-      navigate("/login");
+      
     }
   };
-  const handleRegister = async (userData) => {
-    try {
-        const data = await register(userData);
-        console.log(data);
-        navigate("/login")
-
-    } catch (error) {
-        console.error('Error registering:', error);
-    }
-};
+  
   const handleLogout = useCallback(() => {
     tokenHelper.removeToken();
 
@@ -70,10 +57,9 @@ export const AuthContextProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        login: handleLogin,
+        handleLogin: handleLogin,
         logout: handleLogout,
         loadToken:loadToken,
-        register:handleRegister,
         isLoggedIn,
         data: data,
       }}
