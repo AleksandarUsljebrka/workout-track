@@ -15,7 +15,7 @@ namespace WorkoutTrackAPI.Controllers
 		[HttpGet]
 		[Route("workouts")]
 		[Authorize]
-		public async Task<IActionResult> GetUser()
+		public async Task<IActionResult> GetAll()
 		{
 			string token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
 			var result = await _workoutService.GetAll(token);

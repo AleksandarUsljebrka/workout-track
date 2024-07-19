@@ -8,12 +8,21 @@ const AuthContext = createContext({
   logout: () => {},
   isLoggedIn: false,
   data: {},
+  username:'',
+  userId:'',
+  token:'',
+  email:''
 });
 
 export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [data, setData] = useState({});
+  const [user, setUser] = useState({
+    username:'',
+    userId:'',
+    email:'',
+    rawToken:''
+  });
 
   const navigate = useNavigate();
 
@@ -22,7 +31,9 @@ export const AuthContextProvider = ({ children }) => {
       
       tokenHelper.saveToken(data.token);
 
-      setData(data);
+      const user = tokenHelper.getUser();
+
+      setUser(user);
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Error logging in user:", error);
@@ -38,20 +49,19 @@ export const AuthContextProvider = ({ children }) => {
     navigate("/login");
   }, []);
 
-  const loadToken = useCallback(() => {
+  const loadUser = useCallback(() => {
     if (!tokenHelper.isLoggedin()) {
       return;
     }
 
     if (tokenHelper.isTokenExpired()) {
-        tokenHelper.removeToken();
-         navigate("/login");
-
+      tokenHelper.removeToken();
       return;
     }
 
     setIsLoggedIn(tokenHelper.isLoggedin());
-   
+    const user = tokenHelper.getUser();
+    setUser(user);
   }, []);
 
   return (
@@ -59,9 +69,12 @@ export const AuthContextProvider = ({ children }) => {
       value={{
         handleLogin: handleLogin,
         logout: handleLogout,
-        loadToken:loadToken,
+        loadUser:loadUser,
         isLoggedIn,
-        data: data,
+        username:user.username,
+        userId:user.userId,
+        email:user.email,
+        token:user.rawToken
       }}
     >
       {children}

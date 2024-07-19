@@ -26,7 +26,13 @@ export const saveToken = (token) => {
       
     }
   };
-
+  export const getRawToken = () => {
+    const token = window.localStorage.getItem('token');
+    console.log(token);
+    //const tokenJson = token && JSON.parse(token)?.token;
+  
+    return token;
+  };
   const isTokenExpired = () => {
     const token = getToken();
   
@@ -52,10 +58,41 @@ export const saveToken = (token) => {
     return true;
   };
 
+  export const getId = () => {
+    const token = getToken();
+  
+    return token?.id;
+  };
+  export const getUsername = () => {
+    const token = getToken();
+  
+    return token?.username;
+  };
+  export const getEmail = () => {
+    const token = getToken();
+  
+    return token?.email;
+  };
+  export const getUser = () => {
+    const user = {
+      username: getUsername(),
+      userId: getId(),
+      emai:getEmail(),
+      rawToken:getRawToken()
+    };
+  
+    return user;
+  };
   const tokenHelper ={
     removeToken,
     saveToken,
     isLoggedin,
-    isTokenExpired
+    isTokenExpired,
+    getId,
+    getEmail,
+    getUsername,
+    getUser,
+    getToken,
+    getRawToken
   };
   export default tokenHelper;

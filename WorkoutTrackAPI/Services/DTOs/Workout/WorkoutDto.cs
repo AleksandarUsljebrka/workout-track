@@ -9,6 +9,7 @@ namespace Services.DTOs.Workout
 {
 	public class WorkoutDto:IDTO
 	{
+		public int Id { get; set; }
 		public WorkoutType ExerciseType { get; set; }
 		public int Duration { get; set; }
 		public int CaloriesBurned { get; set; }

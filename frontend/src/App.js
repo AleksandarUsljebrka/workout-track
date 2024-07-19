@@ -13,14 +13,15 @@ import AddWorkout from "./pages/AddWorkout/AddWorkout";
 
 
 function App() {
-  const { loadToken, ...authContext } = useContext(AuthContext);
+  const { loadUser, ...authContext } = useContext(AuthContext);
   const isLoggedIn = authContext.isLoggedIn;
 useEffect(()=>{
-  loadToken();
-},[loadToken])
+  loadUser();
+},[loadUser])
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={
+        !isLoggedIn ? <Home /> : <Navigate to="/dashboard" />} />
       <Route path="/login" element={!isLoggedIn ? <Login /> : <Navigate to="/dashboard" />} >
       </Route>
       <Route path="/register" element={<Register />} />

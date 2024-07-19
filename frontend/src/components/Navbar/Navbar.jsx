@@ -17,7 +17,7 @@ const Navbar = () => {
       <nav className="navbar">
         <div className="navbar-brand">
           <Link to="/" className="navbar-logo">
-            Fitness App
+            Workout Track
           </Link>
         </div>
         <div className="navbar-menu">

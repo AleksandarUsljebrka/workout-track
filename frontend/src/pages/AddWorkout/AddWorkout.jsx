@@ -1,17 +1,34 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 // import  WorkoutContext from '../../context/workoutContext';
+import AuthContext from '../../context/authContext';
+import { createWorkout } from '../../services/api';
+
 import Slider from '../../components/Slider/Slider';
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 import './addWorkout.css';
+import { useNavigate } from 'react-router-dom';
+
 const AddWorkout = () => {
 
+  const {userId} = useContext(AuthContext);
+  
   const [workoutData, setWorkoutData] = useState({
+    userId:userId,
     exerciseType:'',
     caloriesBurned:0,
-    intesity:5,
+    intensity:5,
     fatigue:5,
     duration: 0,
+    date:''
   });
+
+  const [addedWorkout, setAddedWorkout] = useState(false);
+  const navigate = useNavigate();
+  
   const handleSliderChange = (fieldName) => (value) => {
     setWorkoutData({ ...workoutData, [fieldName]: value });
   };
@@ -19,17 +36,32 @@ const AddWorkout = () => {
     setWorkoutData({ ...workoutData, [e.target.name]: e.target.value });
   };
 
+  const handleDateChange = (date) => {
+    setWorkoutData({ ...workoutData, date: date });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-    //   await addWorkout(workoutData);
-    //   alert('Workout added successfully!');
-    //   setNewWorkout({ name: '', description: '', duration: 0 });
+      console.log(workoutData);
+      await createWorkout(workoutData);
+      setAddedWorkout(true);
+
+      alert('Workout added successfully!');
     } catch (error) {
+      setAddedWorkout(false);
       console.error('Error adding workout:', error);
       alert('Failed to add workout. Please try again.');
     }
   };
+
+  useEffect(()=>{
+    if(!addedWorkout){
+      return;
+    }else{
+      navigate('/dashboard');
+    }
+  },[addedWorkout])
 return(
   <div className="add-workout-form">
      <div className='title-form'>
@@ -38,11 +70,11 @@ return(
       <form onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="type">Workout Type:</label>
+            <label htmlFor="exerciseType">Workout Type:</label>
             <select
-              id="type"
-              name="type"
-              value={workoutData.type}
+              id="exerciseType"
+              name="exerciseType"
+              value={workoutData.exerciseType}
               onChange={handleInputChange}
               required
             >
@@ -87,12 +119,14 @@ return(
         </div>
         <div className="form-group">
           <label htmlFor="date">Date:</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={workoutData.date}
-            onChange={handleInputChange}
+          <DatePicker
+            selected={workoutData.date}
+            onChange={handleDateChange}
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="yyyy-MM-dd h:mm aa"
             required
           />
         </div>

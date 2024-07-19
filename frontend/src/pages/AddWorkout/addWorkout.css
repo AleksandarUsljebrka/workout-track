@@ -89,7 +89,8 @@
   
   /* Stil za hover efekat na dugmetu */
   .add-workout-form button[type="submit"]:hover {
-    background-color: #45a049;
+    background: rgb(112, 167, 215);
+
     
 }
   
