@@ -10,6 +10,7 @@ import "./App.css";
 import Layout from "./components/Layout/Layout";
 import { Navigate } from 'react-router-dom';
 import AddWorkout from "./pages/AddWorkout/AddWorkout";
+import WeeklyProgress from "./pages/WeeklyProgress/WeeklyProgress";
 
 
 function App() {
@@ -33,6 +34,10 @@ useEffect(()=>{
       <Route path="/new-workout"
           element={isLoggedIn ? <Layout /> : <Navigate to="/login" />} >
           <Route index element={<AddWorkout/>}/>
+      </Route>
+      <Route path="/progress"
+          element={isLoggedIn ? <Layout /> : <Navigate to="/login" />} >
+          <Route index element={<WeeklyProgress/>}/>
       </Route>
       
     </Routes>

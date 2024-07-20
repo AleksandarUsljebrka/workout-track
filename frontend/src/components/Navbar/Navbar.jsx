@@ -24,6 +24,11 @@ const Navbar = () => {
           <ul className="navbar-nav">
             {isLoggedIn&& (
               <>
+              <li className="nav-item">
+              <Link to="/dashboard" className="nav-link">
+                 All Workouts
+              </Link>
+              </li>
                 <li className="nav-item">
                   <Link to="/progress" className="nav-link">
                     Progress

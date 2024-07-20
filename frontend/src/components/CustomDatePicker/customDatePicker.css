@@ -1,0 +1,17 @@
+.month-picker {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.month-picker label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.month-picker input {
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
