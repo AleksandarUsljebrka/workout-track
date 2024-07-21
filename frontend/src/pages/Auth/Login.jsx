@@ -6,35 +6,45 @@ import AuthContext from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/api";
 import { toast } from 'react-toastify';
+import { useFormik } from "formik";
+import * as yup from 'yup';
+
+const loginSchema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
 
 const Login = () => {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
-
-  const navigate = useNavigate()
 
   const { handleLogin, isLoggedIn, data } = useContext(AuthContext); 
   const [attemptedLogin, setAttemptedLogIn] = useState(false) 
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+  const formik = useFormik({
+    initialValues:{
+      email:'',
+      password:''
+    },
+    validationSchema:loginSchema,
+    onSubmit : async (values) => {
+     
+      setAttemptedLogIn(true)
+      try{
+        const response = await login(values);
+        const data = response.data;
+        await handleLogin(data);
+        toast.success('Login successful!Welcome');
+      }
+      catch(error){
+        toast.error("Login failed! Please check your credentials.");
+      }
+    }
+  
+  })
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setAttemptedLogIn(true)
-    try{
-      const response = await login(user);
-      const data = response.data;
-      await handleLogin(data);
-      toast.success('Login successful!Welcome');
-    }
-    catch(error){
-      toast.error("Login failed! Please check your credentials.");
-    }
-  };
+  const navigate = useNavigate()
 
   useEffect(()=>{
 
@@ -53,29 +63,37 @@ const Login = () => {
   return (
     <div className="wrapper">
       <div className="form-box login">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={formik.handleSubmit}>
           <h1>Login</h1>
           <div className="input-box">
             <input
               type="email"
               name="email"
               placeholder="Email"
-              value={user.email}
-              onChange={handleChange}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               required
             />
             <MdOutlineMail className="icon" />
+            {formik.touched.email && formik.errors.email ? (
+              <p className="error-message">{formik.errors.email}</p>
+            ) : null}
           </div>
           <div className="input-box">
             <input
               type="password"
               name="password"
               placeholder="Password"
-              value={user.password}
-              onChange={handleChange}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               required
             />
             <RiLockPasswordFill className="icon" />
+            {formik.touched.password && formik.errors.password ? (
+              <p className="error-message">{formik.errors.password}</p>
+            ) : null}
           </div>
           <button type="submit">Login</button>
           <div className="register">

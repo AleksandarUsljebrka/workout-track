@@ -10,8 +10,14 @@ export const register = (userData) => {
 export const login = (userData) => {
     return axios.post(`${baseUrl}/user/login`, userData);
 };
-export const createWorkout = (workoutData) =>{
-    return axios.post(`${baseUrl}/workout/new-workout`, workoutData);
+export const createWorkout = (workoutData, token) =>{
+    return axios.post(`${baseUrl}/workout/new-workout`, workoutData,
+        {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+    );
 }
 export const getWorkouts = (token) =>{
     return axios.get(`${baseUrl}/workout/workouts`, {

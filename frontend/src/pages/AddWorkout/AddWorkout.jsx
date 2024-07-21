@@ -1,34 +1,33 @@
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/authContext";
+import { createWorkout } from "../../services/api";
 
-import React, { useContext, useEffect, useState } from 'react';
-// import  WorkoutContext from '../../context/workoutContext';
-import AuthContext from '../../context/authContext';
-import { createWorkout } from '../../services/api';
-
-import Slider from '../../components/Slider/Slider';
+import Slider from "../../components/FormComponents/Slider/Slider";
 import DatePicker from "react-datepicker";
-import { toast } from 'react-toastify';
-import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
 
-import './addWorkout.css';
-import { useNavigate } from 'react-router-dom';
+import "react-datepicker/dist/react-datepicker.css";
+import "./addWorkout.css";
+import Select from "../../components/FormComponents/Select/Select";
+import FormGroup from "../../components/FormComponents/FromGroup/FormGroup";
 
 const AddWorkout = () => {
+  const { userId, token } = useContext(AuthContext);
 
-  const {userId} = useContext(AuthContext);
-  
   const [workoutData, setWorkoutData] = useState({
-    userId:userId,
-    exerciseType:'',
-    caloriesBurned:0,
-    intensity:5,
-    fatigue:5,
+    userId: userId,
+    exerciseType: "",
+    caloriesBurned: 0,
+    intensity: 5,
+    fatigue: 5,
     duration: 0,
-    date:''
+    date: "",
   });
 
   const [addedWorkout, setAddedWorkout] = useState(false);
   const navigate = useNavigate();
-  
+
   const handleSliderChange = (fieldName) => (value) => {
     setWorkoutData({ ...workoutData, [fieldName]: value });
   };
@@ -44,82 +43,86 @@ const AddWorkout = () => {
     e.preventDefault();
     try {
       console.log(workoutData);
-      await createWorkout(workoutData);
+      await createWorkout(workoutData, token);
       setAddedWorkout(true);
 
-      toast.success('Workout added successfully!')
-      //('Workout added successfully!');
+      toast.success("Workout added successfully!");
     } catch (error) {
       setAddedWorkout(false);
-      console.error('Error adding workout:', error);
-      toast.error('Failed to add workout. Please try again.');
+      console.error("Error adding workout:", error);
+      toast.error("Failed to add workout. Please try again.");
     }
   };
 
-  useEffect(()=>{
-    if(!addedWorkout){
+  useEffect(() => {
+    if (!addedWorkout) {
       return;
-    }else{
-      navigate('/dashboard');
+    } else {
+      navigate("/dashboard");
     }
-  },[addedWorkout])
-return(
-  <div className="add-workout-form">
-     <div className='title-form'>
-      <h2>Add New Workout</h2>
-      </div> 
+  }, [addedWorkout]);
+
+  const values = ["Cardio", "Strength Training", "Flexibility"];
+  return (
+    <div className="add-workout-form">
+      <div className="title-form">
+        <h2>Add New Workout</h2>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="exerciseType">Workout Type:</label>
-            <select
+          <FormGroup label="Select Workout Type">
+            <Select
               id="exerciseType"
               name="exerciseType"
               value={workoutData.exerciseType}
               onChange={handleInputChange}
+              values={values}
+              initialValue="Select Workout Type"
               required
-            >
-              <option value="">Select Workout Type</option>
-              <option value="Cardio">Cardio</option>
-              <option value="Strength">Strength Training</option>
-              <option value="Flexibility">Flexibility</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="duration">Duration (minutes):</label>
+            />
+          </FormGroup>
+
+          <FormGroup label="Duration (minutes):">
             <input
+              onChange={handleInputChange}
               type="number"
               id="duration"
               name="duration"
               value={workoutData.duration}
-              onChange={handleInputChange}
+              min="0"
               required
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="caloriesBurned">Calories Burned:</label>
+          </FormGroup>
+
+          <FormGroup label="Calories Burned:">
             <input
+              onChange={handleInputChange}
               type="number"
               id="caloriesBurned"
               name="caloriesBurned"
               value={workoutData.caloriesBurned}
-              onChange={handleInputChange}
+              min="0"
               required
             />
-          </div>
+          </FormGroup>
         </div>
-        <div className="form-group">
-          <label htmlFor="intensity">Intensity:</label>
-          <Slider value={workoutData.intensity} onChange={handleSliderChange('intensity')} />
+        <FormGroup label="Intesity:">
+          <Slider
+            value={workoutData.intensity}
+            onChange={handleSliderChange("intensity")}
+          />
           <span>{workoutData.intensity}</span>
-        </div>
-        <div className="form-group">
-          <label htmlFor="fatigue">Fatigue:</label>
-          <Slider value={workoutData.fatigue} onChange={handleSliderChange('fatigue')} />
+        </FormGroup>
+
+        <FormGroup label="Fatigue:">
+          <Slider
+            value={workoutData.fatigue}
+            onChange={handleSliderChange("fatigue")}
+          />
           <span>{workoutData.fatigue}</span>
-        </div>
-        <div className="form-group">
-          <label htmlFor="date">Date:</label>
+        </FormGroup>
+
+        <FormGroup label="Date:">
           <DatePicker
             selected={workoutData.date}
             onChange={handleDateChange}
@@ -130,11 +133,12 @@ return(
             dateFormat="yyyy-MM-dd h:mm aa"
             required
           />
-        </div>
+        </FormGroup>
+
         <button type="submit">Add Workout</button>
       </form>
     </div>
-);
+  );
 };
 
 export default AddWorkout;

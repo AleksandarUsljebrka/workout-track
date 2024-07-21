@@ -8,41 +8,41 @@ namespace Services.DTOs.Result
 {
 	public class Result : IResult
 	{
-		public bool Successfull { get; set; }
+		public bool Successful { get; set; }
 		public string ErrorMess { get; set; }
 		public IDTO Dto { get; set; }
 		public ErrorCode ErrorCode { get; set; }
 		public string Token { get; set; }
 		public int PostId { get; set; }
-		public Result(bool successfull, ErrorCode erCode, string mess)
+		public Result(bool successful, ErrorCode erCode, string mess)
 		{
-			Successfull = successfull;
+			Successful = successful;
 			ErrorCode = erCode;
 			ErrorMess = mess;
 		}
-		public Result(bool successfull, ErrorCode erCode)
+		public Result(bool successful, ErrorCode erCode)
 		{
-			Successfull = successfull;
+			Successful = successful;
 			ErrorCode = erCode;
 
 		}
-		public Result(bool successfull)
+		public Result(bool successful)
 		{
-			Successfull = successfull;
+			Successful = successful;
 		}
-		public Result(bool successfull, int postId)
+		public Result(bool successful, int postId)
 		{
 			PostId = postId;
-			Successfull = successfull;
+			Successful = successful;
 		}
-		public Result(bool successfull, string token)
+		public Result(bool successful, string token)
 		{
-			Successfull = successfull;
+			Successful = successful;
 			Token = token;
 		}
-		public Result(bool successfull, IDTO dto)
+		public Result(bool successful, IDTO dto)
 		{
-			Successfull = successfull;
+			Successful = successful;
 			Dto = dto;
 		}
 	}
