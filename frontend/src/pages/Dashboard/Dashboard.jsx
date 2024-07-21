@@ -2,36 +2,55 @@ import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../context/authContext';
 import { getWorkouts } from '../../services/api';
 
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import './dashboard.css';
 
 const Dashboard = () => {
   const { userId, token, isLoggedIn } = useContext(AuthContext);
   const [userWorkouts, setUserWorkouts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const workoutsPerPage = 8;
 
-  console.log(token)
   useEffect(() => {
     const fetchUserWorkouts = async () => {
-      if (!isLoggedIn || !token || !userId) return; 
+      if (!isLoggedIn || !token || !userId) return;
 
       try {
         const response = await getWorkouts(token);
         const workouts = response.data.workoutList;
-        console.log(workouts);
-        setUserWorkouts(workouts); 
+        setUserWorkouts(workouts);
       } catch (error) {
         console.error('Error fetching user workouts:', error);
-        alert('Error fetching user workouts:', error);
+        toast.error('Error fetching user workouts!');
       }
     };
     fetchUserWorkouts();
-  }, [userId]);
+  }, [userId, token, isLoggedIn]);
+
+  
+  const indexOfLastWorkout = currentPage * workoutsPerPage;
+  const indexOfFirstWorkout = indexOfLastWorkout - workoutsPerPage;
+  const currentWorkouts = userWorkouts.slice(indexOfFirstWorkout, indexOfLastWorkout);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(userWorkouts.length / workoutsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const handleClick = (event) => {
+    setCurrentPage(Number(event.target.id));
+  };
+
+  const hasWorkouts = currentWorkouts.length>0;
   return (
     <div className="user-workouts-container">
       <div className="title-table">
         <h2>User Workouts</h2>
       </div>
       <div className="table-container">
-        <table className="user-workouts-table">
+      {hasWorkouts ?<table className="user-workouts-table">
           <thead>
             <tr>
               <th>Workout Type</th>
@@ -42,19 +61,30 @@ const Dashboard = () => {
               <th>Date</th>
             </tr>
           </thead>
-          <tbody>
-            {userWorkouts.map((workout) => (
+           <tbody>
+            {currentWorkouts.map((workout) => (
               <tr key={workout.id}>
                 <td>{workout.exerciseType}</td>
                 <td>{workout.duration} min</td>
-                <td>{workout.caloriesBurned}kcal</td>
+                <td>{workout.caloriesBurned} kcal</td>
                 <td>{workout.intensity}</td>
                 <td>{workout.fatigue}</td>
                 <td>{formatDateTime(workout.date)}</td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>:
+        <div className="no-workouts-message">
+        <p>No workouts yet.</p>
+      </div>
+        }
+      </div>
+      <div className="pagination">
+        {pageNumbers.map(number => (
+          <button key={number} id={number} onClick={handleClick} className={currentPage === number ? 'active' : ''}>
+            {number}
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -64,11 +94,11 @@ export default Dashboard;
 
 const formatDateTime = (datetimeStr) => {
   const options = {
-    year: 'numeric',
-    month: 'numeric',
     day: 'numeric',
+    month: 'long',
+    year: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
   };
-  return new Date(datetimeStr).toLocaleString(undefined, options); // undefined za lokalizaciju zadržava lokalno podešavanje
+  return new Date(datetimeStr).toLocaleString(undefined, options);
 };

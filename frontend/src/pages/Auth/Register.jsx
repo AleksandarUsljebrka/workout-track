@@ -7,6 +7,8 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import "./auth.css";
 import { useNavigate } from "react-router-dom";
 
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Register = () => {
   const [user, setUser] = useState({
     email: "",
@@ -27,10 +29,12 @@ const Register = () => {
       const response = await register(user);
       if(response.data.successfull){
         setSuccessfullyRegister(true);
+      toast.success('Successfully registered');
+
       }
     } catch (error) {
       setSuccessfullyRegister(false);
-      alert("Register failed! Please check your credentials.");
+      toast.error("Register failed! Please check your credentials.");
     }
   };
 
