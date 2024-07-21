@@ -20,7 +20,7 @@ namespace WorkoutTrackAPI.Controllers
 			string token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
 			var result = await _workoutService.GetAll(token);
 
-			if (!result.Successfull) return StatusCode((int)result.ErrorCode, result.ErrorMess);
+			if (!result.Successful) return StatusCode((int)result.ErrorCode, result.ErrorMess);
 			return Ok(result.Dto);
 		}
 
@@ -31,7 +31,7 @@ namespace WorkoutTrackAPI.Controllers
 		{
 			var response = await _workoutService.Create(newWorkoutDto);
 
-			if (!response.Successfull) return StatusCode((int)response.ErrorCode, response.ErrorMess);
+			if (!response.Successful) return StatusCode((int)response.ErrorCode, response.ErrorMess);
 
 			return Ok(response);
 

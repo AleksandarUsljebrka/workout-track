@@ -8,7 +8,7 @@ namespace Services.DTOs.Result
 {
 	public interface IResult
 	{
-		bool Successfull { get; set; }
+		bool Successful { get; set; }
 		string ErrorMess { get; set; }
 		IDTO Dto { get; set; }
 		ErrorCode ErrorCode { get; set; }

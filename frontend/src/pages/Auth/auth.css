@@ -82,3 +82,8 @@ form .register p a:hover{
     color: rgb(189, 223, 252);
 
 }
+.error-message{
+    margin-left: 10px;
+    color:red;
+    margin-top: 2px;
+}

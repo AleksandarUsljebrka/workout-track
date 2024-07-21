@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./weeklyProgress.css";
 import Graph from "../../components/Graph/Graph";
+import WeekSummary from "../../components/WeekSummary/WeekSummary";
 
 const WeeklyProgress = () => {
   const { userId, token, isLoggedIn } = useContext(AuthContext);
@@ -93,40 +94,13 @@ const WeeklyProgress = () => {
                   } = calculateWeekStats(weekWorkouts);
 
                   return (
-                    <div key={weekKey} className="week-summary">
-                      <h3 className="week-title">
-                        Week of{" "}
-                        {new Date(weekKey.split(" - ")[0]).toLocaleDateString()}{" "}
-                        -{" "}
-                        {new Date(weekKey.split(" - ")[1]).toLocaleDateString()}
-                      </h3>
-                      <div className="stats-container">
-                        <div className="stat">
-                          <span className="stat-label">Total Duration:</span>
-                          <span className="stat-value">
-                            {totalDuration} min
-                          </span>
-                        </div>
-                        <div className="stat">
-                          <span className="stat-label">
-                            Number of Workouts:
-                          </span>
-                          <span className="stat-value">{numberOfWorkouts}</span>
-                        </div>
-                        <div className="stat">
-                          <span className="stat-label">Average Intensity:</span>
-                          <span className="stat-value">
-                            {averageIntensity.toFixed(2)}
-                          </span>
-                        </div>
-                        <div className="stat">
-                          <span className="stat-label">Average Fatigue:</span>
-                          <span className="stat-value">
-                            {averageFatigue.toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                    <WeekSummary
+                      weekKey={weekKey}
+                      totalDuration={totalDuration}
+                      numberOfWorkouts={numberOfWorkouts}
+                      averageIntensity={averageIntensity}
+                      averageFatigue={averageFatigue}
+                    />
                   );
                 })}
               </div>
