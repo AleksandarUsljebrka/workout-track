@@ -1,0 +1,109 @@
+.weekly-progress-container {
+    width: 1100px;
+    height: 80vh;
+    margin-top: 10px;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+   
+  
+}
+
+
+  .graph-toggle p {
+    margin-right: 10px; 
+  }
+.header-progress {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: static;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.graph-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+/* 
+.weeks-container,
+.chart-container {
+    min-height: 500px;
+    
+} */
+
+.section-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #33e1e4;
+    text-align: center;
+}
+
+.weeks-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    overflow-y: auto;
+    /* max-height: 500px; */
+    background: rgb(11, 24, 46);
+    width: 1100;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* margin-top: 150px; */
+
+}
+
+.week-summary {
+    background-color: rgb(57, 179, 227);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1 0 calc(50% - 20px);
+    margin-bottom: 20px;
+}
+
+.week-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: rgb(11, 24, 46);
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-weight: bold;
+}
+
+.stat-value {
+    color: #0c0c0c;
+}
+
+.no-workouts-message {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    background: rgb(11, 24, 46);
+    color: #33e1e4;
+    font-size: 22px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}

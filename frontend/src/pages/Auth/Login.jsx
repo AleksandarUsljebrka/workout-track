@@ -5,6 +5,7 @@ import "./auth.css";
 import AuthContext from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/api";
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -28,10 +29,10 @@ const Login = () => {
       const response = await login(user);
       const data = response.data;
       await handleLogin(data);
-
+      toast.success('Login successful!Welcome');
     }
     catch(error){
-      alert("Login failed! Please check your credentials.");
+      toast.error("Login failed! Please check your credentials.");
     }
   };
 

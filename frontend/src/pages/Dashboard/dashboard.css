@@ -1,6 +1,7 @@
 .user-workouts-container {
-    max-width: 950px;
-    margin: 50px auto;
+    width: 950px;
+    margin-top: 50px;
+    height:620px;
     padding: 20px;
     background: rgb(11, 24, 46);
     border: 1px solid #ddd;
@@ -9,6 +10,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
   }
   
   .user-workouts-container h2 {
@@ -16,7 +18,6 @@
     font-weight: bold;
     margin-bottom: 20px;
     color: rgb(149, 191, 228);
-    
   }
   
   .table-container {
@@ -40,18 +41,46 @@
   
   .user-workouts-table th {
     background-color: rgb(57, 179, 227);
-
     font-weight: bold;
     color: #333;
   }
   
   .user-workouts-table tbody tr:nth-child(even) {
     background-color: rgb(57, 179, 227);
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    bottom: 20px;
+    position: absolute;
+  }
+  
+  .pagination button {
+    background-color: #33e1e4;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
 
   }
-/*   
-  .user-workouts-table tbody tr:hover {
-    background-color: #074765;
-    cursor: pointer;
-  } */
   
+  .pagination button.active {
+    background-color: #11b3c1;
+  }
+  
+  .pagination button:hover {
+    background-color: #11b3c1;
+  }
+  .no-workouts-message {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    background: rgb(11, 24, 46);
+    color: #33e1e4;
+    font-size: 22px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+  }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Data.Entities;
 using Data.Repository.Interfaces;
+using ExpressTimezone;
 using Microsoft.AspNetCore.Identity;
 using Services.DTOs.Result;
 using Services.DTOs.Workout;
@@ -21,8 +22,11 @@ namespace Services.Services
             if (newWorkoutDto is null) return new Result(false, ErrorCode.BadRequest);
 
             var workout = _mapper.Map<Workout>(newWorkoutDto);
+           
+            var serbiaTime = workout.Date.UTCToSystemTime();
+            workout.Date = serbiaTime;
 
-            await _unitOfWork.WorkoutRepository.Add(workout);
+			await _unitOfWork.WorkoutRepository.Add(workout);
             await _unitOfWork.SaveChanges();
 
             return new Result(true);

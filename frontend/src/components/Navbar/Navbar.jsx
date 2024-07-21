@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import "./navbar.css";
 import AuthContext from "../../context/authContext";
+// import { ToastContainer } from "react-toastify";
+// import toasterStyle from "../../utils/toaster/ToasterStyle.module.css"
 
 
 const Navbar = () => {
@@ -10,10 +12,11 @@ const Navbar = () => {
   
     const handleLogout = () => {
       logout();
-      // Dodatne akcije nakon odjave (npr. preusmeravanje korisnika)
+
     };
   
     return (
+      <>
       <nav className="navbar">
         <div className="navbar-brand">
           <Link to="/" className="navbar-logo">
@@ -24,6 +27,11 @@ const Navbar = () => {
           <ul className="navbar-nav">
             {isLoggedIn&& (
               <>
+              <li className="nav-item">
+              <Link to="/dashboard" className="nav-link">
+                 All Workouts
+              </Link>
+              </li>
                 <li className="nav-item">
                   <Link to="/progress" className="nav-link">
                     Progress
@@ -44,6 +52,11 @@ const Navbar = () => {
           </ul>
         </div>
       </nav>
+      {/* <ToastContainer
+        autoClose={3000}
+        toastClassName={`${toasterStyle['toaster-customization']}`}
+      /> */}
+      </>
     );
   };
   
