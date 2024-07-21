@@ -62,7 +62,7 @@ const AddWorkout = () => {
     }
   }, [addedWorkout]);
 
-  const values = ["Cardio", "Strength Training", "Flexibility"];
+  const values = ["Cardio", "Strength", "Flexibility"];
   return (
     <div className="add-workout-form">
       <div className="title-form">
