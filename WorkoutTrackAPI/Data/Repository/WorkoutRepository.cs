@@ -11,11 +11,17 @@ using System.Threading.Tasks;
 
 namespace Data.Repository
 {
-	public class WorkoutRepository(ApplicationDbContext _context):Repository<Workout>(_context), IWorkoutRepository
+	public class WorkoutRepository(ApplicationDbContext _context) : Repository<Workout>(_context), IWorkoutRepository
 	{
-		public async Task<IEnumerable<Workout>> GetAllWithCondition(Expression<Func<Workout, bool>> filter)
+		public async Task<(IEnumerable<Workout>, int count)> GetAllWithCondition(Expression<Func<Workout, bool>> filter, int pageNumber, int pageSize)
 		{
-			return await _context.Set<Workout>().Where(filter).ToListAsync();
+			var query = _context.Set<Workout>().AsQueryable();
+			query = query.Where(filter);
+
+			var workouts = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+			var totalCount = await query.CountAsync();
+
+			return (workouts, totalCount);
 		}
 
 	}

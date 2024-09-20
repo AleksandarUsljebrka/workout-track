@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Services.DTOs.Workout;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace Services.DTOs.Result
 		public ErrorCode ErrorCode { get; set; }
 		public string Token { get; set; }
 		public int PostId { get; set; }
+		public int Count { get; set; }
+		public WorkoutListDto WorkoutList {  get; set; }
 		public Result(bool successful, ErrorCode erCode, string mess)
 		{
 			Successful = successful;
@@ -44,6 +47,12 @@ namespace Services.DTOs.Result
 		{
 			Successful = successful;
 			Dto = dto;
+		}
+		public Result(bool successful, WorkoutListDto workoutListDto, int count)
+		{
+			Successful = successful;
+			WorkoutList = workoutListDto;
+			Count = count;
 		}
 	}
 }

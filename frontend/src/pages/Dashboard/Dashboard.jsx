@@ -11,6 +11,7 @@ const Dashboard = () => {
   const { userId, token, isLoggedIn } = useContext(AuthContext);
   const [userWorkouts, setUserWorkouts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalWorkouts, setTotalWorkouts] = useState(0);
   const workoutsPerPage = 8;
 
   useEffect(() => {
@@ -18,24 +19,20 @@ const Dashboard = () => {
       if (!isLoggedIn || !token || !userId) return;
 
       try {
-        const response = await getWorkouts(token);
-        const workouts = response.data.workoutList;
+        const response = await getWorkouts(token, currentPage, workoutsPerPage);
+        const workouts = response.data.workouts.workoutList;
         setUserWorkouts(workouts);
+        setTotalWorkouts(response.data.count);
       } catch (error) {
         console.error('Error fetching user workouts:', error);
         toast.error('Error fetching user workouts!');
       }
     };
     fetchUserWorkouts();
-  }, [userId, token, isLoggedIn]);
-
-  
-  const indexOfLastWorkout = currentPage * workoutsPerPage;
-  const indexOfFirstWorkout = indexOfLastWorkout - workoutsPerPage;
-  const currentWorkouts = userWorkouts.slice(indexOfFirstWorkout, indexOfLastWorkout);
+  }, [userId, token, isLoggedIn, currentPage]);
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(userWorkouts.length / workoutsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(totalWorkouts / workoutsPerPage); i++) {
     pageNumbers.push(i);
   }
 
@@ -43,7 +40,7 @@ const Dashboard = () => {
     setCurrentPage(Number(event.target.id));
   };
 
-  const hasWorkouts = currentWorkouts.length>0;
+  const hasWorkouts = userWorkouts.length>0;
   return (
     <div className="user-workouts-container">
       <div className="title-table">
@@ -62,7 +59,7 @@ const Dashboard = () => {
             </tr>
           </thead>
            <tbody>
-            {currentWorkouts.map((workout) => (
+            {userWorkouts.map((workout) => (
               <tr key={workout.id}>
                 <td>{workout.exerciseType}</td>
                 <td>{workout.duration} min</td>

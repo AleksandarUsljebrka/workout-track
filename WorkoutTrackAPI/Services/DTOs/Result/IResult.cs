@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Services.DTOs.Workout;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace Services.DTOs.Result
 		ErrorCode ErrorCode { get; set; }
 		string Token { get; set; }
 		int PostId { get; set; }
+		int Count { get; set; }
+		WorkoutListDto WorkoutList {  get; set; }
 
 	}
 }
