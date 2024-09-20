@@ -3,6 +3,7 @@ using Data.Entities;
 using Data.Repository.Interfaces;
 using ExpressTimezone;
 using Microsoft.AspNetCore.Identity;
+using Services.DTOs;
 using Services.DTOs.Result;
 using Services.DTOs.Workout;
 using Services.Helpers.Interfaces;
@@ -32,19 +33,19 @@ namespace Services.Services
             return new Result(true);
         }
 
-        public async Task<IResult> GetAll(string token)
+        public async Task<IResult> GetAll(string token, Query query)
         {
             var user = await _tokenHelper.UserByToken(token);
             if (user is null) return new Result(false, ErrorCode.Unauthorized);
 
-            var workoutsOfUser = await _unitOfWork.WorkoutRepository.GetAllWithCondition(w => w.UserId == user.Id);
+            var (workoutsOfUser, workoutCount) = await _unitOfWork.WorkoutRepository.GetAllWithCondition(w => w.UserId == user.Id, query.PageNumber, query.PageSize);
 
             WorkoutListDto workoutsDto = new WorkoutListDto()
             {
                 WorkoutList = _mapper.Map<List<WorkoutDto>>(workoutsOfUser)
             };
 
-            return new Result(true, workoutsDto);
+            return new Result(true, workoutsDto, workoutCount);
         }
     }
 }

@@ -19,8 +19,8 @@ export const createWorkout = (workoutData, token) =>{
           }
     );
 }
-export const getWorkouts = (token) =>{
-    return axios.get(`${baseUrl}/workout/workouts`, {
+export const getWorkouts = (token, currentPage, workoutsPerPage) =>{
+    return axios.get(`${baseUrl}/workout/workouts?PageNumber=${currentPage}&PageSize=${workoutsPerPage}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

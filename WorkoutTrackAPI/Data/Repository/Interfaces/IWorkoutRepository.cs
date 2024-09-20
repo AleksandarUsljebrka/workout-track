@@ -10,6 +10,6 @@ namespace Data.Repository.Interfaces
 {
 	public interface IWorkoutRepository:IRepository<Workout>
 	{
-		Task<IEnumerable<Workout>> GetAllWithCondition(Expression<Func<Workout, bool>> filter);
+		Task<(IEnumerable<Workout>,int count)> GetAllWithCondition(Expression<Func<Workout, bool>> filter, int pageNumber, int pageSize);
 	}
 }

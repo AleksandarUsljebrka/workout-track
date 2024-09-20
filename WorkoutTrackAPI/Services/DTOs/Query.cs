@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTOs.Workout
+namespace Services.DTOs
 {
-	public class WorkoutListDto
+	public class Query
 	{
-		public List<WorkoutDto> WorkoutList { get; set; }
+		public int PageNumber { get; set; } = 1;
+		public int PageSize { get; set; } = 8;
 	}
 }

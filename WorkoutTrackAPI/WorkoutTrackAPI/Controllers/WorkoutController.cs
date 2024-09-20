@@ -1,6 +1,7 @@
 ﻿using Data.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.DTOs;
 using Services.DTOs.User;
 using Services.DTOs.Workout;
 using Services.Services.Interfaces;
@@ -15,13 +16,15 @@ namespace WorkoutTrackAPI.Controllers
 		[HttpGet]
 		[Route("workouts")]
 		[Authorize]
-		public async Task<IActionResult> GetAll()
+		public async Task<IActionResult> GetAll([FromQuery] Query query)
 		{
 			string token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
-			var result = await _workoutService.GetAll(token);
+			var result = await _workoutService.GetAll(token, query);
 
 			if (!result.Successful) return StatusCode((int)result.ErrorCode, result.ErrorMess);
-			return Ok(result.Dto);
+			var workouts = result.WorkoutList;
+			var count = result.Count;
+			return Ok(new {workouts, count});
 		}
 
 
