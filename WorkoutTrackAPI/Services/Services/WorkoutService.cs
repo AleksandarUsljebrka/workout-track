@@ -33,7 +33,7 @@ namespace Services.Services
             return new Result(true);
         }
 
-        public async Task<IResult> GetAll(string token, Query query)
+        public async Task<IResult> GetWorkouts(string token, Query query)
         {
             var user = await _tokenHelper.UserByToken(token);
             if (user is null) return new Result(false, ErrorCode.Unauthorized);
@@ -47,5 +47,18 @@ namespace Services.Services
 
             return new Result(true, workoutsDto, workoutCount);
         }
-    }
+		public async Task<IResult> GetAll(string token)
+		{
+			var user = await _tokenHelper.UserByToken(token);
+			if (user is null) return new Result(false, ErrorCode.Unauthorized);
+
+
+			WorkoutListDto workoutsDto = new WorkoutListDto()
+			{
+				WorkoutList = _mapper.Map<List<WorkoutDto>>(user.Workouts)
+			};
+
+			return new Result(true, workoutsDto);
+		}
+	}
 }

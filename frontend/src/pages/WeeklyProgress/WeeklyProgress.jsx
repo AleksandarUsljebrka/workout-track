@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/authContext";
-import { getWorkouts } from "../../services/api";
+import { getAllWorkouts } from "../../services/api";
 import CustomDatePicker from "../../components/CustomDatePicker/CustomDatePicker";
 import {
   groupWorkoutsByWeek,
@@ -31,8 +31,9 @@ const WeeklyProgress = () => {
       if (!isLoggedIn || !token || !userId) return;
 
       try {
-        const response = await getWorkouts(token);
+        const response = await getAllWorkouts(token);
         const workouts = response.data.workoutList;
+        console.log(workouts)
         setUserWorkouts(workouts);
       } catch (error) {
         console.error("Error fetching user workouts:", error);
@@ -95,6 +96,7 @@ const WeeklyProgress = () => {
 
                   return (
                     <WeekSummary
+                    key={weekKey}
                       weekKey={weekKey}
                       totalDuration={totalDuration}
                       numberOfWorkouts={numberOfWorkouts}
