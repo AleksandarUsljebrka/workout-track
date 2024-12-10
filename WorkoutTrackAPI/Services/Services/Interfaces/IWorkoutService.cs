@@ -8,7 +8,8 @@ namespace Services.Services.Interfaces
 	public interface IWorkoutService
 	{
 		Task<IResult> Create(NewWorkoutDto newWorkoutDto);
-		Task<IResult> GetAll(string token, Query query);
+		Task<IResult> GetWorkouts(string token, Query query);
+		Task<IResult> GetAll(string token);
 
 	}
 }

@@ -16,17 +16,28 @@ namespace WorkoutTrackAPI.Controllers
 		[HttpGet]
 		[Route("workouts")]
 		[Authorize]
-		public async Task<IActionResult> GetAll([FromQuery] Query query)
+		public async Task<IActionResult> GetWorkouts([FromQuery] Query query)
 		{
 			string token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
-			var result = await _workoutService.GetAll(token, query);
+			var result = await _workoutService.GetWorkouts(token, query);
 
 			if (!result.Successful) return StatusCode((int)result.ErrorCode, result.ErrorMess);
 			var workouts = result.WorkoutList;
 			var count = result.Count;
 			return Ok(new {workouts, count});
 		}
+		[HttpGet]
+		[Route("all-workouts")]
+		[Authorize]
+		public async Task<IActionResult> GetAll()
+		{
+			string token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
+			var result = await _workoutService.GetAll(token);
 
+			if (!result.Successful) return StatusCode((int)result.ErrorCode, result.ErrorMess);
+			
+			return Ok(result.WorkoutList);
+		}
 
 		[HttpPost]
 		[Route("new-workout")]

@@ -26,3 +26,10 @@ export const getWorkouts = (token, currentPage, workoutsPerPage) =>{
         },
       });
 }
+export const getAllWorkouts = (token) =>{
+  return axios.get(`${baseUrl}/workout/all-workouts`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+}

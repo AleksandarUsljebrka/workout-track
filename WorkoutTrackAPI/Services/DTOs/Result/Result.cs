@@ -54,5 +54,10 @@ namespace Services.DTOs.Result
 			WorkoutList = workoutListDto;
 			Count = count;
 		}
+		public Result(bool successful, WorkoutListDto workoutListDto)
+		{
+			Successful = successful;
+			WorkoutList = workoutListDto;
+		}
 	}
 }
